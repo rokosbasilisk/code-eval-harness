@@ -25,7 +25,7 @@ def parse_args():
 
 def main():
     client = docker.from_env()
-    eval_server = client.containers.create("pysandbox:v1",ports={'5000/tcp': 5000}, detach=True)
+    eval_server = client.containers.create("pysandbox:v1",ports={'5000/tcp': 5000},runtime="runsc", detach=True)
     eval_server.start()
     args = parse_args()
     assert not args.provide_description  # not implemented

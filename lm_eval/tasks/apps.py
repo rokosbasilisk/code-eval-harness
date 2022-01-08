@@ -109,7 +109,7 @@ class Apps(Task):
             if subset=='validation':
                 problem_ids = sorted(os.listdir(prob_path))[int(total_len*(1-split_percentage)):]
         else:
-            problem_ids = sorted(os.listdir(prob_path))[:1]
+            problem_ids = sorted(os.listdir(prob_path))
         for pid,problem_num in enumerate(problem_ids):
             test_case_path = os.path.join(prob_path,problem_num, "input_output.json")
             prompt_path = os.path.join(prob_path,problem_num, "question.txt")
