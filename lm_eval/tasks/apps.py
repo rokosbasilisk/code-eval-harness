@@ -16,8 +16,6 @@ from lm_eval.base import Task
 from lm_eval.base import rf
 from lm_eval.metrics import mean,perplexity
 from pathlib import Path
-from .reindent import run as run_reindent
-from .testing_util import run_test
 from tqdm import tqdm
 import io
 import json
@@ -30,37 +28,12 @@ import random
 import sys
 import time
 import torch
+import requests
 import transformers
 import xml.etree.ElementTree as ET
 
 tokenizer = transformers.GPT2Tokenizer.from_pretrained("gpt2")
 
-# helper functions 
-def reindent_code(codestr):
-    """
-    Given code string, reindent it in the same way that the
-    Github dataset was indented
-    """
-    codestr = io.StringIO(codestr)
-    ret = io.StringIO()
-
-    run_reindent(
-        codestr,
-        ret,
-        config = {
-            "dry-run": False,
-            "help": False,
-            "to": 10,
-            "from": -1,
-            "tabs": True,
-            "encoding": "utf-8",
-            "is-tabs": False,
-            "tabsize": 10,
-            "all-tabs": False
-        }
-    )
-
-    return ret.getvalue()
 
 def generate_prompt(test_case_path, prompt_path, solutions_path, tokenizer, starter_path=None):
     peeking = 0.0
@@ -198,9 +171,12 @@ class Apps(Task):
 
 
     def process_results(self, doc, results):
-        print('problem path is '+doc['prob_path']+'\n')
-        print(results[0]+'\n')
-        results = run_test(doc['prob_path'],results[0])
+        request_json = {
+                "data_path":doc['prob_path'],
+                "program":results[0]
+                }
+        response = requests.post('http://localhost:5000/', json=request_json)
+        results = eval(response.content.decode())
         results = [False if x<0 else x for x in results] 
 
         return {

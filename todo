@@ -1,5 +1,3 @@
-create a docker volume for data and test_programs 
-mount the volume and run the programs inside the container 
-send the output accuracy value as a return value (do proper checking)
+build the docker image with the data inside and programs inside it 
+run and send the output and write the accuracy to a file 
 delete all the test_programs 
-
