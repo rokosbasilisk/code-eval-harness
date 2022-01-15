@@ -86,17 +86,8 @@ class Apps(Task):
     DATASET_PATH = Path("data/apps")
 
     def download(self):
-        if self.DATASET_PATH.exists():
-            return
-        Path.mkdir(self.DATASET_PATH)
-        url = "https://people.eecs.berkeley.edu/~hendrycks/APPS.tar.gz"
-        checksum = "6ef8e98ecca10b0159df0da4b524ecc1ca782a3b9473c57fc547ebccbbc2d0ca"
-        tar_path = self.DATASET_PATH / "APPS.tar.gz"
-        download_file(url, str(tar_path), checksum)
-        sh("""
-        cd data/apps/
-        tar -xf APPS.tar.gz
-        """)
+        "storing dataset in docker-image"
+        pass
 
     def load_docs(self,subset,split_percentage=0):
         prob_path = os.path.join(self.DATASET_PATH,"APPS",subset)
